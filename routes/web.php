@@ -16,11 +16,10 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-// Admin Dashboard Routes
 Route::middleware(['auth'])->prefix('admin')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-    // Dashboard API endpoints
+    // Dashboard API endpoints - Make them all consistent with /admin/api/ prefix
     Route::get('/api/stats', [DashboardController::class, 'getStats']);
     Route::get('/api/successful-checkins', [DashboardController::class, 'getSuccessfulCheckins']);
     Route::get('/api/denied-access', [DashboardController::class, 'getDeniedAccess']);

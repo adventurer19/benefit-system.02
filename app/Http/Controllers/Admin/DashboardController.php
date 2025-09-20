@@ -66,7 +66,7 @@ class DashboardController extends Controller
 
                 return [
                     'id' => $checkin->id,
-                    'time' => $checkin->checked_in_at->format('H:i'),
+                    'time' => $checkin->checked_in_at,
                     'member' => $checkin->member->name,
                     'membership_type' => $membership->type ?? 'N/A',
                     'days_remaining' => max(0, $daysRemaining),
@@ -117,7 +117,7 @@ class DashboardController extends Controller
             ->map(function ($checkin) {
                 return [
                     'id' => $checkin->id,
-                    'time' => $checkin->checked_in_at->format('H:i'),
+                    'time' => $checkin->checked_in_at,
                     'member' => $checkin->member->name,
                     'card_uid' => $checkin->member->card_uid,
                     'status' => $checkin->status->value,
@@ -145,11 +145,11 @@ class DashboardController extends Controller
 
                 $data = [
                     'id' => $checkin->id,
-                    'time' => $checkin->checked_in_at->format('H:i'),
+                    'time' => $checkin->checked_in_at,
                     'member' => $member->name,
                     'card_uid' => $member->card_uid,
                     'status' => $checkin->status->value,
-                    'timestamp' => $checkin->checked_in_at->toISOString(),
+                    'timestamp' => $checkin->checked_in_at,
                 ];
 
                 if ($isSuccess) {
