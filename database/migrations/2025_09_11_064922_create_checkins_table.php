@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('checkins', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('member_id')->nullable()->constrained()->onDelete('cascade');
-            $table->timestamp('timestamp')->useCurrent();
+            $table->foreignId('member_id')->nullable()->constrained()->nullOnDelete();
+            $table->dateTimeTz('checked_in_at')->useCurrent();
             $table->enum('status', ['success', 'denied']);
             $table->timestamps();
         });

@@ -14,7 +14,7 @@
             @endif
 
             <div class="bg-white shadow sm:rounded-lg p-6">
-                <form method="POST" action="{{ route('members.update', $member->id) }}">
+                <form method="POST" action="{{ route('members.update', $member->id) }}" novalidate>
                     @csrf
                     @method('PUT')
 

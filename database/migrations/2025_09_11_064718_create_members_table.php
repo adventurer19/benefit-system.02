@@ -14,9 +14,9 @@ return new class extends Migration
         Schema::create('members', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('email')->unique()->nullable();
-            $table->string('phone')->nullable();
-            $table->string('card_uid')->nullable(); // RFID card UID
+            $table->string('email')->nullable()->unique();
+            $table->string('phone', 32)->nullable()->index();
+            $table->string('card_uid', 64)->nullable()->unique(); // RFID card UID
             $table->timestamps();
         });
     }

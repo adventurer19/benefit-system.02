@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Enums\MembershipStatus;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Member extends Model
 {
@@ -19,7 +22,7 @@ class Member extends Model
     /**
      * A member can have multiple memberships.
      */
-    public function memberships()
+    public function memberships(): HasMany
     {
         return $this->hasMany(Membership::class);
     }
@@ -27,7 +30,7 @@ class Member extends Model
     /**
      * A member can have multiple check-ins.
      */
-    public function checkins()
+    public function checkins(): HasMany
     {
         return $this->hasMany(Checkin::class);
     }
@@ -35,12 +38,23 @@ class Member extends Model
     /**
      * Get the active membership for the member.
      */
-    public function activeMembership()
+    public function activeMembership(): HasOne
     {
-        return $this->memberships()
-            ->where('start_date', '<=', now())
-            ->where('end_date', '>=', now())
-            ->where('status', 'active')
-            ->first();
+        $today = now()->toDateString();
+
+        return $this->hasOne(Membership::class)
+            ->ofMany(['end_date' =>'max', 'id' => 'max'], function ($query) use ($today) {
+                $query->where('start_date', '<=', $today)
+                    ->where('end_date', '>=', $today)
+                    ->where('status', MembershipStatus::Active);
+            });
+    }
+
+    /**
+     * Loads the last check-ins.
+     */
+    public function lastCheckin(): HasOne
+    {
+        return $this->hasOne(Checkin::class)->ofMany('checked_in_at', 'max');
     }
 }
